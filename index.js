@@ -5,6 +5,7 @@ const cors = require("cors");
 const userRouter = require("./routes/user");
 const fs = require('fs');
 
+
 const PORT = process.env.PORT || 5000;
 
 const app = express();
@@ -16,7 +17,8 @@ if (!fs.existsSync(uploadsDir)) {
 
 sequelize
   .authenticate()
-  .then(() => {
+  .then(async () => {
+    await sequelize.sync({ force: false });
   })
   .catch((err) => {
   });

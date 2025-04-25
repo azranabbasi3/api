@@ -11,16 +11,16 @@ const User = sequelize.define(
       primaryKey: true,
     },
     email: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.STRING,
       allowNull: false,
       unique: true,
     },
     password: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.STRING,
       allowNull: false,
     },
     name: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.STRING,
       allowNull: true,
     },
     bio: {
@@ -28,7 +28,7 @@ const User = sequelize.define(
       allowNull: true,
     },
     headline: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.STRING,
       allowNull: true,
     },
     photo: {
@@ -36,8 +36,15 @@ const User = sequelize.define(
       allowNull: true,
     },
     interests: {
-      type: DataTypes.JSONB,
+      type: DataTypes.TEXT,
       allowNull: true,
+      get() {
+        const rawValue = this.getDataValue('interests');
+        return rawValue ? JSON.parse(rawValue) : null;
+      },
+      set(value) {
+        this.setDataValue('interests', value ? JSON.stringify(value) : null);
+      }
     },
   },
   {
@@ -45,7 +52,5 @@ const User = sequelize.define(
     tableName: "users",
   }
 );
-
-
 
 module.exports = User;
