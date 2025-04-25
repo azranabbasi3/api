@@ -155,7 +155,14 @@ const getProfile = async (req, res) => {
 
 const getAllProfiles = async (req, res) => {
   try {
-    const currentUserEmail = req.user.email;
+    const currentUserEmail = req.user?.email;
+    if (!currentUserEmail) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized: User not authenticated"
+      });
+    }
+
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const offset = (page - 1) * limit;
@@ -172,10 +179,19 @@ const getAllProfiles = async (req, res) => {
       offset
     });
 
+    if (users.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: "No users found",
+        data: []
+      });
+    }
+
     const formattedUsers = users.map(user => {
       const userData = user.toJSON();
       if (userData.photo) {
-        userData.photo = `http://localhost:5000/${userData.photo.replace(/\\/g, "/")}`;
+        const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
+        userData.photo = `${baseUrl}/${userData.photo.replace(/\\/g, "/")}`;
       }
       return userData;
     });
@@ -185,9 +201,11 @@ const getAllProfiles = async (req, res) => {
       data: formattedUsers
     });
   } catch (error) {
+    console.error('Error in getAllProfiles:', error);
     res.status(500).json({
       success: false,
-      message: "Error fetching profiles"
+      message: "Error fetching profiles",
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 };
