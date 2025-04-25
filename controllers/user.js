@@ -69,8 +69,6 @@ const login = async (req, res) => {
   }
 };
 
-
-
 const deleteUser = async (req, res) => {
   try {
     const email = req.params.email;
@@ -90,7 +88,6 @@ const deleteUser = async (req, res) => {
       message: "User deleted successfully",
     });
   } catch (error) {
-    console.error(error);
     res.status(500).json({
       success: false,
       message: "Error deleting user",
@@ -125,7 +122,6 @@ const updateProfile = async (req, res) => {
       data: user,
     });
   } catch (error) {
-    console.error(error);
     res.status(500).json({
       success: false,
       message: "Error updating user",
@@ -156,8 +152,6 @@ const getProfile = async (req, res) => {
     });
   }
 };
-
-
 
 const getAllProfiles = async (req, res) => {
   try {
@@ -191,7 +185,6 @@ const getAllProfiles = async (req, res) => {
       data: formattedUsers
     });
   } catch (error) {
-    console.error(error);
     res.status(500).json({
       success: false,
       message: "Error fetching profiles"

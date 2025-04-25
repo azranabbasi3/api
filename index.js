@@ -17,10 +17,8 @@ if (!fs.existsSync(uploadsDir)) {
 sequelize
   .authenticate()
   .then(() => {
-    console.log("connected to postgres");
   })
   .catch((err) => {
-    console.log(err);
   });
 
 app.use(cors());
@@ -29,6 +27,5 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use("/api/user", userRouter);
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
 });
 
